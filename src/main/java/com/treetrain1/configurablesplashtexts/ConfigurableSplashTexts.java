@@ -20,8 +20,6 @@ public class ConfigurableSplashTexts implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-		ConfigurableSplashTextsConfig.get();
-
 		var added = ConfigurableSplashTextsConfig.get().general.addedSplashes;
 		var removed = ConfigurableSplashTextsConfig.get().general.removedSplashes;
 

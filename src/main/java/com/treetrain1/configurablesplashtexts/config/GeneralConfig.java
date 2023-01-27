@@ -18,6 +18,7 @@ public class GeneralConfig implements ConfigData {
 	public List<String> addedSplashes = DefaultGeneralConfig.ADDED_SPLASHES;
 
 	public List<String> removedSplashes = DefaultGeneralConfig.REMOVED_SPLASHES;
+	public int splashColor = DefaultGeneralConfig.SPLASH_COLOR;
 
 	public boolean removeVanilla = DefaultGeneralConfig.REMOVE_VANILLA;
 
@@ -39,6 +40,13 @@ public class GeneralConfig implements ConfigData {
 				.requireRestart()
 				.build();
 
+		var splashColor = entryBuilder.startColorField(text("splash_color"), config.splashColor)
+				.setDefaultValue(DefaultGeneralConfig.SPLASH_COLOR)
+				.setSaveConsumer(newValue -> config.splashColor = newValue)
+				.setTooltip(tooltip("splash_color"))
+				.requireRestart()
+				.build();
+
 		var removeVanilla = entryBuilder.startBooleanToggle(text("remove_vanilla"), config.removeVanilla)
 				.setDefaultValue(DefaultGeneralConfig.REMOVE_VANILLA)
 				.setSaveConsumer(newValue -> config.removeVanilla = newValue)
@@ -48,6 +56,7 @@ public class GeneralConfig implements ConfigData {
 
 		category.addEntry(add);
 		category.addEntry(remove);
+		category.addEntry(splashColor);
 		category.addEntry(removeVanilla);
 	}
 }
