@@ -1,9 +1,3 @@
-# Fabric Example Mod
+# Configurable Splash Texts
 
-## Setup
-
-For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
-
-## License
-
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+This mod allows the user to add and remove splash texts to the Minecraft main menu without the use of a resourcepack.
