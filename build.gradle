@@ -110,6 +110,7 @@ dependencies {
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${fabric_version}")
 
 	// Lib39
+	include(modApi("com.unascribed:lib39-core:${lib39_version}"))
 	include(modApi("com.unascribed:lib39-dessicant:${lib39_version}"))
 	include(modApi("com.unascribed:lib39-ripple:${lib39_version}"))
 
