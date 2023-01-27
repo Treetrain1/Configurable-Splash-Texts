@@ -33,6 +33,8 @@
   "depends": {
     "modmenu": ">=4.1.2",
     "cloth-config": ">=8.0.0",
+    "lib39-dessicant": "*",
+    "lib39-ripple": "*",
     "fabricloader": ">=0.14.13",
     "fabric-api": ">=0.73.0",
     "minecraft": "1.19.2",
