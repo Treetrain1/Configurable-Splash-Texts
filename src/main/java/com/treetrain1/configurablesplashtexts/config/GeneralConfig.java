@@ -44,7 +44,6 @@ public class GeneralConfig implements ConfigData {
 				.setDefaultValue(DefaultGeneralConfig.SPLASH_COLOR)
 				.setSaveConsumer(newValue -> config.splashColor = newValue)
 				.setTooltip(tooltip("splash_color"))
-				.requireRestart()
 				.build();
 
 		var removeVanilla = entryBuilder.startBooleanToggle(text("remove_vanilla"), config.removeVanilla)
