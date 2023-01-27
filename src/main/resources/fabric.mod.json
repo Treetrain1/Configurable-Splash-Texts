@@ -1,38 +1,43 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "configurablesplashtexts",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Configurable Splash Texts",
+  "description": "Allows to create or remove additional splash texts to display in Minecraft's main menu",
   "authors": [
-    "Me!"
+    "Treetrain1"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://github.com/Treetrain1/Configurable-Splash-Texts",
+    "sources": "https://github.com/Treetrain1/Configurable-Splash-Texts",
+    "issues": "https://github.com/Treetrain1/Configurable-Splash-Texts/issues"
   },
 
-  "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "license": "LGPL-3.0",
+  "icon": "assets/configurablesplashtexts/icon.png",
 
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
-    "main": [
-      "net.fabricmc.example.ExampleMod"
+    "client": [
+      "com.treetrain1.configurablesplashtexts.ConfigurableSplashTexts"
+    ],
+    "modmenu": [
+      "com.treetrain1.configurablesplashtexts.config.ModMenuIntegration"
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "configurablesplashtexts.mixins.json"
   ],
 
   "depends": {
-    "fabricloader": ">=0.14.11",
-    "fabric-api": "*",
+    "modmenu": ">=5.0.0",
+    "cloth-config": ">=9.0.0",
+    "fabricloader": ">=0.14.13",
+    "fabric-api": ">=0.73.0",
     "minecraft": "~1.19.3",
     "java": ">=17"
   },
   "suggests": {
-    "another-mod": "*"
   }
 }

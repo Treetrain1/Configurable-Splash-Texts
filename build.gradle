@@ -1,52 +1,170 @@
 plugins {
-	id 'fabric-loom' version '1.0-SNAPSHOT'
-	id 'maven-publish'
+	id("fabric-loom") version("+")
+	id("io.github.juuxel.loom-quiltflower") version("+")
+	id("maven-publish")
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
+project.ext.release = findProperty("releaseType") == "stable"
 
-archivesBaseName = project.archives_base_name
-version = project.mod_version
-group = project.maven_group
+setArchivesBaseName(archives_base_name)
+setVersion(getVersion())
+setGroup(maven_group)
+
+loom {
+	setRuntimeOnlyLog4j(true)
+
+	mixin {
+		setDefaultRefmapName("mixins.configurablesplashtexts.refmap.json")
+	}
+
+	interfaceInjection {
+		// When enabled, injected interfaces from dependecies will be applied.
+		setEnableDependencyInterfaceInjection(false)
+	}
+}
+
+sourceSets {
+	main {
+		resources {
+			srcDirs += [
+					"src/main/generated"
+			]
+		}
+	}
+}
+
+loom {
+	runs {
+		datagen {
+			inherit(client)
+			name("Data Generation")
+			vmArg("-Dfabric-api.datagen")
+			vmArg("-Dfabric-api.datagen.output-dir=${file("src/main/generated")}")
+			//vmArg("-Dfabric-api.datagen.strict-validation")
+			vmArg("-Dfabric-api.datagen.modid=configurablesplashtexts")
+
+			setIdeConfigGenerated(true)
+			setRunDir("build/datagen")
+		}
+	}
+}
+
+configurations {
+	includeModImplementation
+	includeImplementation
+
+	include.extendsFrom(includeImplementation)
+	include.extendsFrom(includeModImplementation)
+
+	implementation.extendsFrom(includeImplementation)
+	modImplementation.extendsFrom(includeModImplementation)
+}
 
 repositories {
 	// Add repositories to retrieve artifacts from in here.
 	// You should only use this when depending on other mods because
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
-	// for more information about repositories.
+	maven {
+		setUrl("https://maven.terraformersmc.com")
+
+		content {
+			includeGroup("com.terraformersmc")
+		}
+	}
+	maven {
+		setUrl("https://maven.shedaniel.me/")
+	}
+	maven {
+		setUrl("https://maven.parchmentmc.org")
+	}
+	maven {
+		setName("Quilt")
+		setUrl("https://maven.quiltmc.org/repository/release")
+	}
+	maven {
+		setUrl("https://repo.sleeping.town")
+		content {
+			includeGroup("com.unascribed")
+		}
+	}
+
+	flatDir {
+		dirs("libs")
+	}
 }
 
 dependencies {
 	// To change the versions see the gradle.properties file
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	minecraft("com.mojang:minecraft:${minecraft_version}")
+	mappings(loom.layered {
+		// please annoy treetrain if this doesnt work
+		it.mappings("org.quiltmc:quilt-mappings:${minecraft_version}+build.${quilt_mappings}:intermediary-v2")
+		it.parchment("org.parchmentmc.data:parchment-1.19.3:${parchment_mappings}@zip")
+		it.officialMojangMappings {
+			setNameSyntheticMembers(false)
+		}
+	})
+	modImplementation("net.fabricmc:fabric-loader:${loader_version}")
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	modImplementation("net.fabricmc.fabric-api:fabric-api:${fabric_version}")
 
-	// Uncomment the following line to enable the deprecated Fabric API modules. 
-	// These are included in the Fabric API production distribution and allow you to update your mod to the latest modules at a later more convenient time.
+	// Lib39
+	include(modApi("com.unascribed:lib39-dessicant:${lib39_version}"))
+	include(modApi("com.unascribed:lib39-ripple:${lib39_version}"))
 
-	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
-}
+	// Mod Menu
+	modApi("com.terraformersmc:modmenu:${modmenu_version}")
 
-processResources {
-	inputs.property "version", project.version
-
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
+	// Cloth Config
+	modApi("me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}") {
+		exclude(group: "net.fabricmc.fabric-api")
+		exclude(group: "com.terraformersmc")
 	}
 }
 
+processResources {
+	inputs.property("version", project.version)
+
+	filesMatching("fabric.mod.json") {
+		expand("version": project.version)
+	}
+}
+
+quiltflower {
+	quiltflowerVersion.set("1.9.0")
+}
+
+javadoc {
+	options.tags = ["reason"]
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+	setClassifier("javadoc")
+	from(javadoc.destinationDir)
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+	setClassifier("sources")
+	from(sourceSets.main.allSource)
+}
+
 tasks.withType(JavaCompile).configureEach {
+	it.options.setEncoding("UTF-8")
 	// Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
-	it.options.release = 17
+	it.options.setRelease(17)
+	options.setFork(true)
+	options.setIncremental(true)
+}
+
+tasks.withType(Test).configureEach {
+	setMaxParallelForks(Runtime.runtime.availableProcessors().intdiv(2) ?: 1)
 }
 
 java {
+	setSourceCompatibility(JavaVersion.VERSION_17)
+	setTargetCompatibility(JavaVersion.VERSION_17)
+
 	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
 	// if it is present.
 	// If you remove this line, sources will not be generated.
@@ -57,6 +175,21 @@ jar {
 	from("LICENSE") {
 		rename { "${it}_${project.archivesBaseName}"}
 	}
+}
+
+artifacts {
+	archives(sourcesJar)
+	archives(javadocJar)
+}
+
+String getVersion() {
+	String version = "${mod_version}-${mod_loader}+${minecraft_version}"
+
+	if (!project.release) {
+		version += "-unstable"
+	}
+
+	return version
 }
 
 // configure the maven publication

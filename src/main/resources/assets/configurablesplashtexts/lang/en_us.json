@@ -1,0 +1,19 @@
+{
+  "lib39:enable_enhanced_lang": true,
+
+  "option.configurablesplashtexts": {
+    "component.title": "Configurable Splash Texts Options",
+
+    "general": "General",
+
+    "added_splashes": "Added Splashes",
+    "removed_splashes": "Removed Splashes",
+    "remove_vanilla": "Remove Vanilla"
+  },
+
+  "tooltip.configurablesplashtexts": {
+    "added_splashes": "Strings that should be added to the main menu's splash texts.",
+    "removed_splashes": "Strings representing splash texts that should be removed.\nMust be the exact text.",
+    "remove_vanilla": "Removes all vanilla splash texts."
+  }
+}
