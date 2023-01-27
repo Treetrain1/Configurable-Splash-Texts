@@ -30,7 +30,7 @@ public class ConfigurableSplashTexts implements ClientModInitializer {
 				log("Added '" + string + "' to splash texts.", LogType.INFO, true);
 			}
 			for (var string : removed) {
-				log("Removed '" + string + "' from splash texts.", LogType.INFO, UNSTABLE_LOGGING);
+				log("Removed '" + string + "' from splash texts.", LogType.INFO, true);
 			}
 		}
 
