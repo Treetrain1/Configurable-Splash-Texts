@@ -8,12 +8,14 @@
 
     "added_splashes": "Added Splashes",
     "removed_splashes": "Removed Splashes",
+    "splash_color": "Splash Text Color",
     "remove_vanilla": "Remove Vanilla"
   },
 
   "tooltip.configurablesplashtexts": {
     "added_splashes": "Strings that should be added to the main menu's splash texts.",
     "removed_splashes": "Strings representing splash texts that should be removed.\nMust be the exact text.",
+    "splash_color": "The color splash text should be displayed in",
     "remove_vanilla": "Removes all vanilla splash texts."
   }
 }
