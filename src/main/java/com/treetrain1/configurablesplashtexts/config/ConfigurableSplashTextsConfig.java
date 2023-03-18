@@ -40,7 +40,6 @@ public class ConfigurableSplashTextsConfig extends PartitioningSerializer.Global
 	public static Screen buildScreen(Screen parent) {
 		var configBuilder = ConfigBuilder.create().setParentScreen(parent).setTitle(text("component.title"));
 		configBuilder.setSavingRunnable(() -> AutoConfig.getConfigHolder(ConfigurableSplashTextsConfig.class).save());
-		//ConfigCategory general = configBuilder.getOrCreateCategory(text("general"));
 		var general = configBuilder.getOrCreateCategory(text("general"));
 		ConfigEntryBuilder entryBuilder = configBuilder.entryBuilder();
 		GeneralConfig.setupEntries(general, entryBuilder);
