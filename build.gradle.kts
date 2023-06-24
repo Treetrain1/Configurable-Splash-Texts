@@ -1,12 +1,16 @@
 import com.matthewprenger.cursegradle.CurseArtifact
 import com.matthewprenger.cursegradle.CurseProject
 import com.matthewprenger.cursegradle.CurseRelation
+import groovy.xml.XmlSlurper
 import org.ajoberstar.grgit.Grgit
+import org.codehaus.groovy.runtime.ResourceGroovyMethods
 import java.io.FileInputStream
 import java.nio.file.Files
 import java.util.Properties
 import org.kohsuke.github.GHReleaseBuilder
 import org.kohsuke.github.GitHub
+import java.io.FileNotFoundException
+import java.net.URL
 
 buildscript {
     repositories {
@@ -89,17 +93,6 @@ sourceSets {
 
 loom {
     runs {
-        register("datagen") {
-            client()
-            name("Data Generation")
-            vmArg("-Dfabric-api.datagen")
-            vmArg("-Dfabric-api.datagen.output-dir=${file("src/main/generated")}")
-            //vmArg("-Dfabric-api.datagen.strict-validation")
-            vmArg("-Dfabric-api.datagen.modid=$mod_id")
-
-            ideConfigGenerated(true)
-            runDir = "build/datagen"
-        }
 
         named("client") {
             ideConfigGenerated(false)
@@ -319,7 +312,6 @@ tasks {
 
 val test: Task by tasks
 val runClient: Task by tasks
-val runDatagen: Task by tasks
 
 val remapJar: Task by tasks
 val sourcesJar: Task by tasks
@@ -359,9 +351,79 @@ fun getVersion(): String {
     return version
 }
 
-if (!(release == true || System.getenv("GITHUB_ACTIONS") == "true")) {
-    test.dependsOn(runDatagen)
-    runClient.dependsOn(runDatagen)
+val env = System.getenv()
+
+publishing {
+    val mavenUrl = env["MAVEN_URL"]
+    val mavenUsername = env["MAVEN_USERNAME"]
+    val mavenPassword = env["MAVEN_PASSWORD"]
+
+    val release = mavenUrl?.contains("release")
+    val snapshot = mavenUrl?.contains("snapshot")
+
+    val publishingValid = rootProject == project && !mavenUrl.isNullOrEmpty() && !mavenUsername.isNullOrEmpty() && !mavenPassword.isNullOrEmpty()
+
+    val publishVersion = makeModrinthVersion(mod_version)
+    val snapshotPublishVersion = publishVersion + if (snapshot == true) "-SNAPSHOT" else ""
+
+    val publishGroup = rootProject.group.toString().trim(' ')
+
+    val hash = if (grgit.branch != null && grgit.branch.current() != null) grgit.branch.current().fullName else ""
+
+    publications {
+        var publish = true
+        try {
+            if (publishingValid) {
+                try {
+                    val xml = ResourceGroovyMethods.getText(URL("$mavenUrl/${publishGroup.replace('.', '/')}/$snapshotPublishVersion/$publishVersion.pom"))
+                    val metadata = XmlSlurper().parseText(xml)
+
+                    if (metadata.getProperty("hash").equals(hash)) {
+                        publish = false
+                    }
+                } catch (ignored: FileNotFoundException) {
+                    // No existing version was published, so we can publish
+                }
+            } else {
+                publish = false
+            }
+        } catch (e: Exception) {
+            publish = false
+            println("Unable to publish to maven. The maven server may be offline.")
+        }
+
+        if (publish) {
+            create<MavenPublication>("mavenJava") {
+                from(components["java"])
+
+                artifact(javadocJar)
+
+                pom {
+                    groupId = publishGroup
+                    artifactId = rootProject.base.archivesName.get().lowercase()
+                    version = snapshotPublishVersion
+                    withXml {
+                        asNode().appendNode("properties").appendNode("hash", hash)
+                    }
+                }
+            }
+        }
+    }
+    repositories {
+
+        if (publishingValid) {
+            maven {
+                url = uri(mavenUrl!!)
+
+                credentials {
+                    username = mavenUsername
+                    password = mavenPassword
+                }
+            }
+        } else {
+            mavenLocal()
+        }
+    }
 }
 
 extra {
