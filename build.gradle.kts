@@ -57,28 +57,10 @@ group = maven_group
 val local_frozenlib = findProject(":FrozenLib") != null
 val release = findProperty("releaseType")?.equals("stable")
 
-val testmod by sourceSets.registering {
-    runtimeClasspath += sourceSets.main.get().runtimeClasspath
-    compileClasspath += sourceSets.main.get().compileClasspath
-}
-
 loom {
     runtimeOnlyLog4j.set(true)
 
     runs {
-        register("testmodClient") {
-            client()
-            ideConfigGenerated(project.rootProject == project)
-            name("Testmod Client")
-            source(testmod.get())
-        }
-        register("testmodServer") {
-            server()
-            ideConfigGenerated(project.rootProject == project)
-            name("Testmod Server")
-            source(testmod.get())
-        }
-
         named("client") {
             ideConfigGenerated(false)
         }
@@ -237,8 +219,6 @@ dependencies {
 
     // Jankson
     implementation("blue.endless:jankson:$jankson_version")
-
-    "testmodImplementation"(sourceSets.main.get().output)
 
     /*
         // Sodium
