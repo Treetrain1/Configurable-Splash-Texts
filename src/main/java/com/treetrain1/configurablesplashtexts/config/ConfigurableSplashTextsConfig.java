@@ -4,7 +4,7 @@ import com.treetrain1.configurablesplashtexts.ConfigurableSplashTexts;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
-import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
+import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import me.shedaniel.autoconfig.serializer.PartitioningSerializer;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
@@ -22,7 +22,7 @@ public class ConfigurableSplashTextsConfig extends PartitioningSerializer.Global
 
 	public static ConfigurableSplashTextsConfig get() {
 		if (!ConfigurableSplashTexts.areConfigsInit) {
-			AutoConfig.register(ConfigurableSplashTextsConfig.class, PartitioningSerializer.wrap(GsonConfigSerializer::new));
+			AutoConfig.register(ConfigurableSplashTextsConfig.class, PartitioningSerializer.wrap(JanksonConfigSerializer::new));
 			ConfigurableSplashTexts.areConfigsInit = true;
 		}
 		return AutoConfig.getConfigHolder(ConfigurableSplashTextsConfig.class).getConfig();

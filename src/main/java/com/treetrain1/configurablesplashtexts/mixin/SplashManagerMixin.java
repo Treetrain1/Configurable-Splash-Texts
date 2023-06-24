@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 
-@Mixin(value = SplashManager.class, priority = 1) // mixin must run first to prevent adding modded splashes
+@Mixin(value = SplashManager.class, priority = 1) // mixin must run first to prevent removing modded splashes
 public class SplashManagerMixin {
 
     @Inject(method = "apply(Ljava/util/List;Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/util/profiling/ProfilerFiller;)V", at = @At("HEAD"))

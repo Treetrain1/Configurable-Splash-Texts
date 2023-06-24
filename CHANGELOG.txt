@@ -1,0 +1,9 @@
+Hello
+Put changelog in plain text please
+Make sure to clear this after each release
+
+Put changelog here:
+-----------------
+- Updated to 1.20.1
+- Switched config to JSON5. Old configs will need to be converted.
+- Switched implementation to use FrozenLib

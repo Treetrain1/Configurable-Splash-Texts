@@ -3,6 +3,7 @@ package com.treetrain1.configurablesplashtexts.config;
 import com.treetrain1.configurablesplashtexts.config.defaultconfig.DefaultGeneralConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
+import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.fabricmc.api.EnvType;
@@ -20,6 +21,7 @@ public class GeneralConfig implements ConfigData {
 	public List<String> removedSplashes = DefaultGeneralConfig.REMOVED_SPLASHES;
 	public int splashColor = DefaultGeneralConfig.SPLASH_COLOR;
 
+	@Comment("Removes all vanilla splashes.")
 	public boolean removeVanilla = DefaultGeneralConfig.REMOVE_VANILLA;
 
 	@Environment(EnvType.CLIENT)

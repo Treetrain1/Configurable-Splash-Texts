@@ -1,21 +1,15 @@
 {
-  "lib39:enable_enhanced_lang": true,
+  "option.configurablesplashtexts.component.title": "Configurable Splash Texts Options",
 
-  "option.configurablesplashtexts": {
-    "component.title": "Configurable Splash Texts Options",
+  "option.configurablesplashtexts.general": "General",
 
-    "general": "General",
+  "option.configurablesplashtexts.added_splashes": "Added Splashes",
+  "option.configurablesplashtexts.removed_splashes": "Removed Splashes",
+  "option.configurablesplashtexts.splash_color": "Splash Text Color",
+  "option.configurablesplashtexts.remove_vanilla": "Remove Vanilla",
 
-    "added_splashes": "Added Splashes",
-    "removed_splashes": "Removed Splashes",
-    "splash_color": "Splash Text Color",
-    "remove_vanilla": "Remove Vanilla"
-  },
-
-  "tooltip.configurablesplashtexts": {
-    "added_splashes": "Strings that should be added to the main menu's splash texts.",
-    "removed_splashes": "Strings representing splash texts that should be removed.\nMust be the exact text.",
-    "splash_color": "The color splash text should be displayed in",
-    "remove_vanilla": "Removes all vanilla splash texts."
-  }
+  "tooltip.configurablesplashtexts.added_splashes": "Strings that should be added to the main menu's splash texts.",
+  "tooltip.configurablesplashtexts.removed_splashes": "Strings representing splash texts that should be removed.\nMust be the exact text.",
+  "tooltip.configurablesplashtexts.splash_color": "The color splash text should be displayed in",
+  "tooltip.configurablesplashtexts.remove_vanilla": "Removes all vanilla splash texts."
 }

@@ -1,6 +1,5 @@
 package com.treetrain1.configurablesplashtexts.config.defaultconfig;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.world.item.DyeColor;
 
 import java.util.ArrayList;

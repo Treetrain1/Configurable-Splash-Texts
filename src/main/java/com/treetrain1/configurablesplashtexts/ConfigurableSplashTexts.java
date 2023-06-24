@@ -2,10 +2,9 @@ package com.treetrain1.configurablesplashtexts;
 
 import com.treetrain1.configurablesplashtexts.config.ConfigurableSplashTextsConfig;
 import com.treetrain1.configurablesplashtexts.log.LogType;
-import com.unascribed.lib39.ripple.api.SplashTextRegistry;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
+import net.frozenblock.lib.menu.api.SplashTextAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,11 +31,13 @@ public class ConfigurableSplashTexts implements ClientModInitializer {
 			}
 		}
 
-		for (var string : removed) {
-			SplashTextRegistry.remove(string);
+		for (var string : added) {
+			SplashTextAPI.add(string);
 		}
 
-		SplashTextRegistry.registerStatic(added.toArray(new String[]{}));
+		for (var string : removed) {
+			SplashTextAPI.remove(string);
+		}
 	}
 
 	// LOGGING
